@@ -32,8 +32,9 @@ namespace e_Invoice.Mvc.Controllers
 
         public ActionResult CreateParastastiko()
         {
-            
-            return View();
+            IList<InvoiceViewModel> invoices = new List<InvoiceViewModel>();
+            invoices = invoiceService.LoadFromOut();
+            return View(invoices);
         }
         public ActionResult UploadPdf()
         {
@@ -72,7 +73,7 @@ namespace e_Invoice.Mvc.Controllers
 
         public ActionResult InvoicesList()
         {
-            List<InvoiceViewModel> invoices = new List<InvoiceViewModel>();
+            IList<InvoiceViewModel> invoices = new List<InvoiceViewModel>();
             if (Request.Files.Count > 0)
             {
                 try
@@ -97,14 +98,7 @@ namespace e_Invoice.Mvc.Controllers
                         file.SaveAs(fname);
 
                     }
-
-                    string[] filess = Directory.GetFiles(Server.MapPath("~/In/"));
-                    foreach (var item in filess)
-                    {
-                        FileInfo fileIn = new FileInfo(item);
-                        invoices.Add(invoiceService.LoadFromFile(fileIn));
-                       
-                    }
+                    invoices = invoiceService.LoadFromIn();
                 }
                 catch (Exception ex)
                 {
@@ -123,6 +117,12 @@ namespace e_Invoice.Mvc.Controllers
         public ActionResult _ViewModal()
         {
             return View();
+        }
+
+        public ActionResult CreatPdf(PdfreateViewModel pdfreateViewModel)
+        {
+           //invoiceService.WriteToFile();
+            return RedirectToAction("CreateParastastiko");
         }
     }
 }
