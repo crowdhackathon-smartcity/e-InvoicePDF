@@ -19,6 +19,7 @@ namespace eInvoicePdf.Console
 
             FileInfo fi = new FileInfo(@"C:\eInvoicePdf\In\Invoice.pdf");
             InvoiceViewModel dto = service.LoadFromFile(fi);
+            service.createPdf(dto);
 
             var filename = dto.Filename;            
             service.WriteToFile(dto, new FileInfo(@"C:\eInvoicePdf\Out\out.pdf"));
