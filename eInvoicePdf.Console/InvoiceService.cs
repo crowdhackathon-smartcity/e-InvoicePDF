@@ -16,13 +16,20 @@ namespace eInvoicePdf.Console
     {
         public IList<IndustryClassificationCodeViewModel> getIndustryClassificationCodes()
         {
-            return new List<IndustryClassificationCodeViewModel>();
-
+            var retList = new List<IndustryClassificationCodeViewModel>();
+            retList.Add( new IndustryClassificationCodeViewModel() {Code = "62.01.11.03", Desc = "Υπηρεσίες ανάπτυξης λογισμικού πολυμέσων" });
+            retList.Add(new IndustryClassificationCodeViewModel() { Code = "71.12.19.04", Desc = "Υπηρεσίες μελετών λιμενικών έργων" });
+            retList.Add(new IndustryClassificationCodeViewModel() { Code = "46.47.1", Desc = "Χονδρικό εμπόριο επίπλων" });
+            return retList;
         }
 
         public IList<InvoiceTypeViewModel> getInvoiceTypes()
         {
-            return new List<InvoiceTypeViewModel>();
+            var retList = new List<InvoiceTypeViewModel>();
+            retList.Add(new InvoiceTypeViewModel { Desc = "ΤΙΜΟΛΟΓΙΟ", Code = "01" });
+            retList.Add(new InvoiceTypeViewModel { Desc = "ΑΠΟΔΕΙΞΗ ΠΑΡΟΧΗΣ ΥΠΗΡΕΣΙΩΝ", Code = "02" });
+            retList.Add(new InvoiceTypeViewModel { Desc = "ΠΙΣΤΩΤΙΚΟ ΤΙΜΟΛΟΓΙΟ", Code = "03" });
+            return retList;
         }
 
         public IList<InvoiceViewModel> LoadFromIn()
@@ -35,11 +42,15 @@ namespace eInvoicePdf.Console
             return LoadFromDirectory(new DirectoryInfo(@"C:\eInvoicePdf\Out"));
         }
 
-
         public IList<InvoiceViewModel> LoadFromDirectory(DirectoryInfo dir)
         {
-
-            return new List<InvoiceViewModel>();
+            var files = dir.EnumerateFiles("*.pdf").ToList();
+            var retList =  new List<InvoiceViewModel>();
+            foreach (var item in files)
+            {
+                retList.Add(LoadFromFile(item));
+            }
+            return retList;
         }
 
         public InvoiceViewModel LoadFromFile(FileInfo file)
