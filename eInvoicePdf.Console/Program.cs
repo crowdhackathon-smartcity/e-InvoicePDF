@@ -17,7 +17,7 @@ namespace eInvoicePdf.Console
             string inFile = @"C:\eInvoicePdf\In\Invoice.pdf";
             FileInfo fi = new FileInfo(inFile);
             var service = new InvoiceService();
-            InvoiceDto dto = service.LoadFromFile(fi);
+            InvoiceViewModel dto = service.LoadFromFile(fi);
 
             var filename = dto.Filename;
 
@@ -43,27 +43,27 @@ namespace eInvoicePdf.Console
     }
 
 
-    class InvoiceTypeDto
+    class InvoiceTypeViewModel
     {
         public string Code { get; set; }
         public string Desc { get; set; }
 
     }
 
-    class InvoiceDto
+    class InvoiceViewModel
     {
         public string ID { get; set; }
         public DateTime IssueDate { get; set; }
-        public Party Supplier { get; set; }
-        public Party Customer { get; set; }
+        public PartyViewModel Supplier { get; set; }
+        public PartyViewModel Customer { get; set; }
         public string Reason { get; set; }
         public string InvoiceType  { get; set; }
-        public InvoiceLineDto[] Lines { get; set; }
+        public InvoiceLineViewModel[] Lines { get; set; }
         public string Filename { get; set; }
 
     }
 
-    class Party
+    class PartyViewModel
     {
         public string AccountID { get; set; }
         public string Name { get; set; }
@@ -77,13 +77,13 @@ namespace eInvoicePdf.Console
 
     }
 
-    class IndustryClassificationCode
+    class IndustryClassificationCodeViewModel
     {
         public string Code { get; set; }
         public string Desc { get; set; }
     }
 
-    class InvoiceLineDto
+    class InvoiceLineViewModel
     {
 
         public string ID { get; set; }

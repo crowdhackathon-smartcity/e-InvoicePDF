@@ -13,42 +13,42 @@ namespace eInvoicePdf.Console
 
     class InvoiceService
     {
-        IList<IndustryClassificationCode> getIndustryClassificationCodes()
+        IList<IndustryClassificationCodeViewModel> getIndustryClassificationCodes()
         {
-            return new List<IndustryClassificationCode>();
+            return new List<IndustryClassificationCodeViewModel>();
 
         }
 
-        IList<InvoiceTypeDto> getInvoiceTypes()
+        IList<InvoiceTypeViewModel> getInvoiceTypes()
         {
-            return new List<InvoiceTypeDto>();
+            return new List<InvoiceTypeViewModel>();
         }
 
-        public IList<InvoiceDto> LoadFromIn()
+        public IList<InvoiceViewModel> LoadFromIn()
         {
             return LoadFromDirectory(new DirectoryInfo(@"C:\eInvoicePdf\In"));
         }
 
-        public IList<InvoiceDto> LoadFromOut()
+        public IList<InvoiceViewModel> LoadFromOut()
         {
             return LoadFromDirectory(new DirectoryInfo(@"C:\eInvoicePdf\Out"));
         }
 
 
-        public IList<InvoiceDto> LoadFromDirectory(DirectoryInfo dir)
+        public IList<InvoiceViewModel> LoadFromDirectory(DirectoryInfo dir)
         {
 
-            return new List<InvoiceDto>();
+            return new List<InvoiceViewModel>();
         }
 
-        public InvoiceDto LoadFromFile(FileInfo file)
+        public InvoiceViewModel LoadFromFile(FileInfo file)
         {
             PdfReader reader = new PdfReader(file.FullName);
             byte[] metadata = reader.Metadata;
 
             //XmpCore.XmpMetaFactory.
             XmpCore.IXmpMeta meta = XmpCore.XmpMetaFactory.ParseFromBuffer(reader.Metadata);
-
+            reader.Close();
             string ns = "http://www.eInvoicePdf.gr/ns/XMP/";
             string ublKey = "e:file";
 
@@ -63,9 +63,9 @@ namespace eInvoicePdf.Console
             return dto;
         }
 
-        public InvoiceDto Convert2Dto(InvoiceType src)
+        public InvoiceViewModel Convert2Dto(InvoiceType src)
         {
-            var dest = new InvoiceDto();
+            var dest = new InvoiceViewModel();
             dest.ID = src.ID.Value;
             dest.IssueDate = src.IssueDate.Value;
             if (src.Note.Length > 0)
@@ -73,7 +73,7 @@ namespace eInvoicePdf.Console
 
             dest.InvoiceType = src.InvoiceTypeCode.Value;
 
-            dest.Supplier = new Party();
+            dest.Supplier = new PartyViewModel();
             dest.Supplier.AccountID = src.AccountingSupplierParty.CustomerAssignedAccountID.Value;
             dest.Supplier.Name = src.AccountingSupplierParty.Party.PartyName[0].Name.Value;
             dest.Supplier.VAT = src.AccountingSupplierParty.Party.PartyTaxScheme[0].TaxScheme.ID.Value;
@@ -87,11 +87,11 @@ namespace eInvoicePdf.Console
                 dest.Supplier.IndustryClassificationName = src.AccountingSupplierParty.Party.IndustryClassificationCode.name;
             }
 
-
-            var lines = new List<InvoiceLineDto>();
+             
+            var lines = new List<InvoiceLineViewModel>();
             foreach (var item in src.InvoiceLine)
             {
-                var lineDto = new InvoiceLineDto();
+                var lineDto = new InvoiceLineViewModel();
                 lineDto.ID = item.ID.Value;
                 if (item.UUID != null)
                     lineDto.UUID = item.UUID.Value;
@@ -108,11 +108,14 @@ namespace eInvoicePdf.Console
             return dest;
         }
 
-        public void WriteToFile(InvoiceDto dto, FileInfo fi)
+        public void WriteToFile(InvoiceViewModel dto, FileInfo fi)
         {
             var tmpFilename = fi.FullName + "_tmp";
-            File.Copy(fi.FullName, tmpFilename);
+            File.Copy(fi.FullName, tmpFilename, true);
+            //FileStream fs = fi.Open(FileMode.Open);
+            //FileStream fs = new FileStream(tmpFilename, FileMode.Open);
             PdfReader reader = new PdfReader(tmpFilename);
+            
             
             byte[] metadata = reader.Metadata;
             //reader.Close();
@@ -138,16 +141,19 @@ namespace eInvoicePdf.Console
             stamper.Close();
             reader.Close();
             File.Delete(tmpFilename);
-            
+
         }
 
-        public InvoiceType Convert2Invoice(InvoiceDto dto)
+        public InvoiceType Convert2Invoice(InvoiceViewModel src)
         {
-            var invoice = new InvoiceType();
+            var dest = new InvoiceType();
+            dest.ID = new IDType() { Value = src.ID };
+            dest.IssueDate = new IssueDateType() { Value = src.IssueDate };
+            dest.Note = new NoteType[]  { new NoteType() { Value = src.Reason }};
+            dest.InvoiceTypeCode = new InvoiceTypeCodeType { Value = src.InvoiceType };
+            
 
-
-
-            return invoice;
+            return dest;
         }
     }
 }
