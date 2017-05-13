@@ -69,7 +69,10 @@ namespace eInvoicePdf.Console
         public string Name { get; set; }
         public string VAT { get; set; }
         public string TaxationAuthority { get; set; }
-        public string Address { get; set; }
+        public string StreetName { get; set; }
+        public string BuildingNumber { get; set; }
+
+        //public string Address { get; set; }
         public string CityName { get; set; }
         public string PostalZone { get; set; }
         public string IndustryClassificationCode { get; set; }

@@ -77,8 +77,8 @@ namespace eInvoicePdf.Console
             dest.Supplier.AccountID = src.AccountingSupplierParty.CustomerAssignedAccountID.Value;
             dest.Supplier.Name = src.AccountingSupplierParty.Party.PartyName[0].Name.Value;
             dest.Supplier.VAT = src.AccountingSupplierParty.Party.PartyTaxScheme[0].TaxScheme.ID.Value;
-            dest.Supplier.Address = src.AccountingSupplierParty.Party.PostalAddress.StreetName.Value;
-            dest.Supplier.Address += " " + src.AccountingSupplierParty.Party.PostalAddress.BuildingNumber.Value;
+            dest.Supplier.StreetName = src.AccountingSupplierParty.Party.PostalAddress.StreetName.Value;
+            dest.Supplier.BuildingNumber = src.AccountingSupplierParty.Party.PostalAddress.BuildingNumber.Value;
             dest.Supplier.CityName = src.AccountingSupplierParty.Party.PostalAddress.CityName.Value;
             dest.Supplier.PostalZone = src.AccountingSupplierParty.Party.PostalAddress.PostalZone.Value;
             if (src.AccountingSupplierParty.Party.IndustryClassificationCode != null)
@@ -87,7 +87,7 @@ namespace eInvoicePdf.Console
                 dest.Supplier.IndustryClassificationName = src.AccountingSupplierParty.Party.IndustryClassificationCode.name;
             }
 
-             
+
             var lines = new List<InvoiceLineViewModel>();
             foreach (var item in src.InvoiceLine)
             {
@@ -115,8 +115,8 @@ namespace eInvoicePdf.Console
             //FileStream fs = fi.Open(FileMode.Open);
             //FileStream fs = new FileStream(tmpFilename, FileMode.Open);
             PdfReader reader = new PdfReader(tmpFilename);
-            
-            
+
+
             byte[] metadata = reader.Metadata;
             //reader.Close();
             //@"C:\eInvoicePdf\out.pdf"
@@ -130,11 +130,11 @@ namespace eInvoicePdf.Console
 
             //XmpCore.XmpMetaFactory.SchemaRegistry.RegisterNamespace(targetNs, "e");
             //meta.DeleteProperty(ns, ublKey);
-            
-            
+
+
             meta.SetProperty(ns, ublKey, content);
 
-            PdfStamper stamper = new PdfStamper(reader, new FileStream(fi.FullName , FileMode.Create));
+            PdfStamper stamper = new PdfStamper(reader, new FileStream(fi.FullName, FileMode.Create));
             XmpCore.Options.SerializeOptions opts = new XmpCore.Options.SerializeOptions();
             metadata = XmpCore.XmpMetaFactory.SerializeToBuffer(meta, opts);
             stamper.XmpMetadata = metadata;
@@ -149,10 +149,52 @@ namespace eInvoicePdf.Console
             var dest = new InvoiceType();
             dest.ID = new IDType() { Value = src.ID };
             dest.IssueDate = new IssueDateType() { Value = src.IssueDate };
-            dest.Note = new NoteType[]  { new NoteType() { Value = src.Reason }};
+            dest.Note = new NoteType[] { new NoteType() { Value = src.Reason } };
             dest.InvoiceTypeCode = new InvoiceTypeCodeType { Value = src.InvoiceType };
-            
 
+            dest.AccountingSupplierParty = new SupplierPartyType
+            {
+                CustomerAssignedAccountID = new CustomerAssignedAccountIDType() { Value = src.Supplier.AccountID },
+                Party = new PartyType()
+                {
+                    PartyName = new PartyNameType[] { new PartyNameType() { Name = new NameType1 { Value = src.Supplier.Name } } },
+                    PartyTaxScheme = new PartyTaxSchemeType[] { new PartyTaxSchemeType { TaxScheme = new TaxSchemeType { ID = new IDType { Value = src.Supplier.VAT } } } },
+                    PostalAddress = new AddressType
+                    {
+                        StreetName = new StreetNameType { Value = src.Supplier.StreetName },
+                        BuildingNumber = new BuildingNumberType { Value = src.Supplier.BuildingNumber },
+                        CityName = new CityNameType { Value = src.Supplier.CityName },
+                        PostalZone = new PostalZoneType { Value = src.Supplier.PostalZone }
+                    }
+                }
+            };
+                
+            if (!string.IsNullOrEmpty(src.Supplier.IndustryClassificationCode))
+            {
+                dest.AccountingSupplierParty.Party.IndustryClassificationCode = new IndustryClassificationCodeType { Value = src.Supplier.IndustryClassificationCode };
+            }
+
+            var lines = new List<InvoiceLineType>();
+            foreach (var item in src.Lines)
+            {
+                var line = new InvoiceLineType();
+                line.ID = new IDType { Value = item.ID };
+                line.InvoicedQuantity = new InvoicedQuantityType { unitCode = item.UnitCode, Value = item.InvoicedQuantity };
+                line.TaxTotal = new TaxTotalType[]
+                {
+                     new TaxTotalType { TaxSubtotal = new TaxSubtotalType[]
+                                        {
+                                            new TaxSubtotalType
+                                            {
+                                                TaxCategory = new TaxCategoryType { Percent = new PercentType1 { Value = item.VatPercentage } },
+                                                 TaxAmount = new TaxAmountType { Value = item.TaxAmount}
+                                            }
+                                        }
+                                      }
+                };
+                lines.Add(line);
+            }
+            
             return dest;
         }
     }
