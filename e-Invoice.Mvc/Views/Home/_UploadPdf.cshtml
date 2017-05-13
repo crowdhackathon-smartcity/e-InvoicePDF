@@ -1,0 +1,25 @@
+﻿
+@model IEnumerable<string>
+
+<table class="table table-hover">
+    <thead>
+    <th>Αριθμός Παραστατικού</th>
+    <th>Ημερομηνία Έκδοσης</th>
+    <th>Επωνυμία Προμηθευτή</th>
+    <th>ΑΦΜ</th>
+    <th>Αιτιολογία</th>
+    <th>Συνολική Αξία</th>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Supplier.Name</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    }
+    </table>
