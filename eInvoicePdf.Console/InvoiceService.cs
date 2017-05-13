@@ -6,20 +6,21 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace eInvoicePdf.Console
 {
 
-    class InvoiceService
+    public class InvoiceService
     {
-        IList<IndustryClassificationCodeViewModel> getIndustryClassificationCodes()
+        public IList<IndustryClassificationCodeViewModel> getIndustryClassificationCodes()
         {
             return new List<IndustryClassificationCodeViewModel>();
 
         }
 
-        IList<InvoiceTypeViewModel> getInvoiceTypes()
+        public IList<InvoiceTypeViewModel> getInvoiceTypes()
         {
             return new List<InvoiceTypeViewModel>();
         }
@@ -126,11 +127,22 @@ namespace eInvoicePdf.Console
 
 
             XmpCore.IXmpMeta meta = XmpCore.XmpMetaFactory.ParseFromBuffer(metadata);
-            string content = meta.GetPropertyString(ns, ublKey);
+            //string content = meta.GetPropertyString(ns, ublKey);
 
+            //if (! XmpCore.XmpMetaFactory.SchemaRegistry.Namespaces.an)
             //XmpCore.XmpMetaFactory.SchemaRegistry.RegisterNamespace(targetNs, "e");
-            //meta.DeleteProperty(ns, ublKey);
+            var invoice = Convert2Invoice(dto);
+            var content = string.Empty;
 
+            XmlSerializer ser = new XmlSerializer(typeof(InvoiceType));
+            using (var sww = new StringWriter())
+            {
+                using (XmlWriter writer = XmlWriter.Create(sww))
+                {
+                    ser.Serialize(writer, invoice);
+                    content = sww.ToString(); // Your XML
+                }
+            }
 
             meta.SetProperty(ns, ublKey, content);
 
@@ -180,6 +192,7 @@ namespace eInvoicePdf.Console
                 var line = new InvoiceLineType();
                 line.ID = new IDType { Value = item.ID };
                 line.InvoicedQuantity = new InvoicedQuantityType { unitCode = item.UnitCode, Value = item.InvoicedQuantity };
+                line.Item = new ItemType { Name = new NameType1 { Value = item.ItemName } };
                 line.TaxTotal = new TaxTotalType[]
                 {
                      new TaxTotalType { TaxSubtotal = new TaxSubtotalType[]
@@ -194,7 +207,7 @@ namespace eInvoicePdf.Console
                 };
                 lines.Add(line);
             }
-            
+            dest.InvoiceLine = lines.ToArray();
             return dest;
         }
     }

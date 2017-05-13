@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="InvoiceService.cs" />
     <Compile Include="InvoiceUblModel.cs" />
+    <Compile Include="InvoiceViewModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
