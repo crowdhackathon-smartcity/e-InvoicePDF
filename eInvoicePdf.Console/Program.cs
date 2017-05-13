@@ -14,25 +14,22 @@ namespace eInvoicePdf.Console
     {
         static void Main(string[] args)
         {
-            string inFile = @"C:\eInvoicePdf\In\Invoice.pdf";
-            FileInfo fi = new FileInfo(inFile);
             var service = new InvoiceService();
+            var items = service.LoadFromIn();
+
+            FileInfo fi = new FileInfo(@"C:\eInvoicePdf\In\Invoice.pdf");
             InvoiceViewModel dto = service.LoadFromFile(fi);
 
-            var filename = dto.Filename;
-
-            
-            var outFile = @"C:\eInvoicePdf\Out\out.pdf";
-            service.WriteToFile(dto, new FileInfo(outFile));
+            var filename = dto.Filename;            
+            service.WriteToFile(dto, new FileInfo(@"C:\eInvoicePdf\Out\out.pdf"));
 
             /*
-
-            meta.SetProperty(ns, ublKey, content);
-            PdfStamper stamper = new PdfStamper(reader, new FileStream(@"C:\eInvoicePdf\out.pdf", FileMode.Create));
-            XmpCore.Options.SerializeOptions opts = new XmpCore.Options.SerializeOptions();
-            metadata = XmpCore.XmpMetaFactory.SerializeToBuffer(meta, opts);
-            stamper.XmpMetadata = metadata;
-            stamper.Close();
+                meta.SetProperty(ns, ublKey, content);
+                PdfStamper stamper = new PdfStamper(reader, new FileStream(@"C:\eInvoicePdf\out.pdf", FileMode.Create));
+                XmpCore.Options.SerializeOptions opts = new XmpCore.Options.SerializeOptions();
+                metadata = XmpCore.XmpMetaFactory.SerializeToBuffer(meta, opts);
+                stamper.XmpMetadata = metadata;
+                stamper.Close();
 
             */
         }
