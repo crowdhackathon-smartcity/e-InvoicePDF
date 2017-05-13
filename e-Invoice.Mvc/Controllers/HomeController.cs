@@ -4,8 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using eInvoicePdf.Console;
-
+using e_Invoice.Mvc.Models;
 namespace e_Invoice.Mvc.Controllers
 {
     public class HomeController : Controller
@@ -41,7 +40,7 @@ namespace e_Invoice.Mvc.Controllers
             return View();
         }
 
-        public ActionResult _UploadPdf()
+        public ActionResult InvoicesList()
         {
             List<InvoiceViewModel> invoices = new List<InvoiceViewModel>();
             if (Request.Files.Count > 0)
@@ -67,15 +66,13 @@ namespace e_Invoice.Mvc.Controllers
                         fname = Path.Combine(Server.MapPath("~/In/"), fname);
                         file.SaveAs(fname);
 
-                        string[] filess = Directory.GetFiles(Server.MapPath("~/In/"));
+                    }
 
-                      
-                        foreach (var item in filess)
-                        {
-                            FileInfo fileIn = new FileInfo(item);
-                            //invoices.Add(invoiceService.LoadFromFile(fileIn));
-                            invoices.Add(new InvoiceViewModel() { Supplier = new PartyViewModel { Name = "kostas" } });
-                        }
+                    string[] filess = Directory.GetFiles(Server.MapPath("~/In/"));
+                    foreach (var item in filess)
+                    {
+                        FileInfo fileIn = new FileInfo(item);
+                        invoices.Add(invoiceService.LoadFromFile(fileIn));
                        
                     }
                 }
@@ -85,7 +82,7 @@ namespace e_Invoice.Mvc.Controllers
                 }
             }
 
-            return PartialView(invoices);
+            return View(invoices);
         }
 
 

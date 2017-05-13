@@ -39,16 +39,18 @@
                     fileData.append('username', 'Manas');
                     console.log
                     $.ajax({
-                        url: '/Home/_UploadPdf',
+                        url: '/Home/InvoicesList',
                         type: "POST",
                         contentType: false, // Not to set any content header
                         processData: false, // Not to process data
                         data: fileData,
                         success: function (result) {
+                            
                             $("#divPdfUploads").html(result);
                         },
                         error: function (err) {
-                            alert(err.responseText);
+                            console.log(err.responseText);
+                            //alert(err.responseText);
                         }
                     })
                 })
