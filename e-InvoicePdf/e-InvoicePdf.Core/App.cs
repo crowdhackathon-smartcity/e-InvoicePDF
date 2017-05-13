@@ -14,6 +14,7 @@ namespace eInvoicePdf.Core
                 .AsInterfaces()
                 .RegisterAsLazySingleton();
 
+
             CreatableTypes().
                 EndingWith("Repository")
                 .AsTypes()
