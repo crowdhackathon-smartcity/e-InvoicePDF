@@ -1,6 +1,6 @@
 ﻿
 @using e_Invoice.Mvc.Models;
-@model IEnumerable<Parastatiko>
+@model IEnumerable<InvoiceViewModel>
 
 
 @{
@@ -8,53 +8,89 @@
 }
 
 <h2>Παραστατικά</h2>
+@using (Html.BeginForm("UploadPdf", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <table class="table table-hover">
+        <thead>
+        <th>Αριθμός Παραστατικού</th>
+        <th>Ημερομηνία Έκδοσης</th>
+        <th>Επωνυμία Προμηθευτή</th>
+        <th>ΑΦΜ</th>
+        <th>Αιτιολογία</th>
+        <th>Συνολική Αξία</th>
+        </thead>
 
 
-    <div id="divPdfUploads">
+        @foreach (var item in Model)
+        {
+            decimal priceAmount = 0;
+            decimal InvoicedQuantity = 0;
+            decimal total = 0;
+            foreach (var line in item.Lines)
+            {
+                priceAmount += line.PriceAmount;
+                InvoicedQuantity += line.InvoicedQuantity;
+            }
+               total = (InvoicedQuantity * priceAmount);
+            <tr>
+                <td>@item.ID</td>
+                <td>@item.IssueDate</td>
+                <td>@item.Supplier.Name</td>
+                <td>@item.Supplier.VAT</td>
+                <td>@item.Reason</td>
+                <td>@total</td>
+            </tr>
 
-    </div>
+
+
+        }
+    </table>
+
+    <input type="file" name="file" value="file" id="file"/>
+    <button type="submit" class="btn btn-primary">Primary</button>
+}
+
+@*id="btnUploadPdf"*@
 
 
 
-    <input type="file" name="fileUpload" value="fileUpload" id="fileUpload">
-    <button id="btnUploadPdf" class="btn btn-primary" type="submit">Button</button>
 
 
-    @section Scripts{
-        <script>
-            $(function () {
-                $("#btnUploadPdf").on("click", function () {
-                    var fileUpload = $("#fileUpload").get(0);
-                    var files = fileUpload.files;
+@section Scripts{
+    <script>
+        $(function () {
+            $("#btnUploadPdf").on("click", function () {
+                var fileUpload = $("#fileUpload").get(0);
+                var files = fileUpload.files;
 
-                    // Create FormData object
-                    var fileData = new FormData();
+                // Create FormData object
+                var fileData = new FormData();
 
-                    // Looping over all files and add it to FormData object
-                    for (var i = 0; i < files.length; i++) {
-                        fileData.append(files[i].name, files[i]);
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                console.log
+                $.ajax({
+                    url: '/Home/InvoicesList',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+
+                        $("#divPdfUploads").html(result);
+                    },
+                    error: function (err) {
+                        console.log(err.responseText);
+                        //alert(err.responseText);
                     }
-
-                    // Adding one more key to FormData object
-                    fileData.append('username', 'Manas');
-                    console.log
-                    $.ajax({
-                        url: '/Home/InvoicesList',
-                        type: "POST",
-                        contentType: false, // Not to set any content header
-                        processData: false, // Not to process data
-                        data: fileData,
-                        success: function (result) {
-                            
-                            $("#divPdfUploads").html(result);
-                        },
-                        error: function (err) {
-                            console.log(err.responseText);
-                            //alert(err.responseText);
-                        }
-                    })
                 })
-            });
+            })
+        });
 
-        </script>
-    }
+    </script>
+}

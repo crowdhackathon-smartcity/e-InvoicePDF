@@ -2,6 +2,52 @@
 @Html.ActionLink("Button ", "ViewModal", "Home",
 null, new { @class = "modal-link btn btn-success" })
 
+
+@using (Html.BeginForm("UploadPdf", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <table class="table table-hover">
+        <thead>
+        <th>Αριθμός Παραστατικού</th>
+        <th>Ημερομηνία Έκδοσης</th>
+        <th>Επωνυμία Προμηθευτή</th>
+        <th>ΑΦΜ</th>
+        <th>Αιτιολογία</th>
+        <th>Συνολική Αξία</th>
+        </thead>
+
+
+        @foreach (var item in Model)
+        {
+            decimal priceAmount = 0;
+            decimal InvoicedQuantity = 0;
+            decimal total = 0;
+            foreach (var line in item.Lines)
+            {
+                priceAmount += line.PriceAmount;
+                InvoicedQuantity += line.InvoicedQuantity;
+            }
+            total = (InvoicedQuantity * priceAmount);
+            <tr>
+                <td>@item.ID</td>
+                <td>@item.IssueDate</td>
+                <td>@item.Supplier.Name</td>
+                <td>@item.Supplier.VAT</td>
+                <td>@item.Reason</td>
+                <td>@total</td>
+            </tr>
+
+
+
+        }
+    </table>
+
+    <button type="submit" class="btn btn-primary">Primary</button>
+}
+
+
+
+
+
 <div style="padding-left: 15px; padding-right: 15px;" id="modal-container" class="modal fade"
      tabindex="-1" role="dialog">
    
