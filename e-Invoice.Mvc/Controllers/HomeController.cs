@@ -32,12 +32,42 @@ namespace e_Invoice.Mvc.Controllers
 
         public ActionResult CreateParastastiko()
         {
+            
             return View();
         }
-
         public ActionResult UploadPdf()
         {
-            return View();
+            List<InvoiceViewModel> invoices = new List<InvoiceViewModel>();
+            string[] filess = Directory.GetFiles(Server.MapPath("~/In/"));
+            foreach (var item in filess)
+            {
+                FileInfo fileIn = new FileInfo(item);
+                invoices.Add(invoiceService.LoadFromFile(fileIn));
+
+            }
+            return View(invoices);
+        }
+        [HttpPost]
+        public ActionResult UploadPdf(HttpPostedFileBase file)
+        {
+            List<InvoiceViewModel> invoices = new List<InvoiceViewModel>();
+            string fname;
+            fname = file.FileName;
+
+
+
+            // Get the complete folder path and store the file inside it.  
+            fname = Path.Combine(Server.MapPath("~/In/"), fname);
+            file.SaveAs(fname);
+
+            string[] filess = Directory.GetFiles(Server.MapPath("~/In/"));
+            foreach (var item in filess)
+            {
+                FileInfo fileIn = new FileInfo(item);
+                invoices.Add(invoiceService.LoadFromFile(fileIn));
+
+            }
+            return View(invoices);
         }
 
         public ActionResult InvoicesList()

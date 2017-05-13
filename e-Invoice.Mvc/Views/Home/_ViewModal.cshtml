@@ -55,7 +55,10 @@
                     </div>
                     <div class="form-group col-md-4">
                         <label for="exampleInputEmail1">Είδος: </label>
-                        <input class="form-control" id="kind" placeholder="">
+                        <select id="kind">
+                            <option></option>
+                            <option value="1">1</option>
+                        </select>
                     </div>
                     <div class="form-group col-md-4">
                         <label for="exampleInputEmail1">Τ.Κ.: </label>
@@ -69,7 +72,32 @@
                     </div>
                 </div>
                 <div class="row">
+                    <button class="addItem">+</button>
                     <label for="exampleInputEmail1">Λίστα είδη: </label>
+                    <table id="itemsTable">
+                        <thead>
+                        <th>CPV</th>
+                        <th>Περιγραφή</th>
+                        <th>ΜΜ</th>
+                        <th>Αξία</th>
+                        <th>Ποσότητα</th>
+                        <th>Έκπτωση</th>
+                        <th>ΦΠΑ</th>
+                        <th>Συνολική Αξία</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text"/></td>
+                                <td><input type="text"/></td>
+                                <td><input type="text"/></td>
+                                <td><input type="text"/></td>
+                                <td><input type="text"/></td>
+                                <td><input type="text"/></td>
+                                <td><input type="text"/></td>
+                                <td><input type="text"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="row">
                     <div class="col-md-4 col-md-offset-4">
@@ -88,6 +116,12 @@
             $('#modal-container').modal('hide');
         });
         $('.datepicker').datepicker();
+        $('#kind').select2();
+        $('.addItem').on('click', function (e) {
+            e.preventDefault();
+            $('#itemsTable tbody').append(
+                '<tr><td><input type="text"/></td><td><input type="text"/></td><td><input type="text"/></td><td><input type="text"/></td><td><input type="text"/></td><td><input type="text"/></td><td><input type="text"/></td><td><input type="text"/></td></tr>');
+        });
     });
 
 </script>
@@ -105,6 +139,13 @@
         $("#kind").val();
         $("#tk").val();
         $("#job").val();
+
+        var items = {};
+        $('#itemsTable tbody tr').each(function () {
+            $(this).find('td').each(function() {
+                console.log($(this).find('input').val());
+            });
+        });
         
         //menei datepicker kai lista proiontwn
         event.preventDefault();
