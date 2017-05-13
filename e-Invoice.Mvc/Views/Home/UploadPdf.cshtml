@@ -1,0 +1,66 @@
+﻿
+@using e_Invoice.Mvc.Models;
+@model IEnumerable<Parastatiko>
+
+
+@{
+    ViewBag.Title = "UploadPdf";
+}
+
+<h2>Παραστατικά</h2>
+
+<table class="table table-hover">
+    <thead>
+    <th>Αριθμός Παραστατικού</th>
+    <th>Ημερομηνία Έκδοσης</th>
+    <th>Επωνυμία Προμηθευτή</th>
+    <th>ΑΦΜ</th>
+    <th>Αιτιολογία</th>
+    <th>Συνολική Αξία</th>
+    </thead>
+    <div id="divPdfUploads">
+
+    </div>
+
+</table>
+
+    <input type="file" name="fileUpload" value="fileUpload" id="fileUpload">
+    <button id="btnUploadPdf" class="btn btn-primary" type="submit">Button</button>
+
+
+    @section Scripts{
+        <script>
+            $(function () {
+                $("#btnUploadPdf").on("click", function () {
+                    var fileUpload = $("#fileUpload").get(0);
+                    var files = fileUpload.files;
+
+                    // Create FormData object
+                    var fileData = new FormData();
+
+                    // Looping over all files and add it to FormData object
+                    for (var i = 0; i < files.length; i++) {
+                        fileData.append(files[i].name, files[i]);
+                    }
+
+                    // Adding one more key to FormData object
+                    fileData.append('username', 'Manas');
+                    console.log
+                    $.ajax({
+                        url: '/Home/_UploadPdf',
+                        type: "POST",
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
+                        data: fileData,
+                        success: function (result) {
+                            $("#divPdfUploads").html(result);
+                        },
+                        error: function (err) {
+                            alert(err.statusText);
+                        }
+                    })
+                })
+            });
+
+        </script>
+    }
