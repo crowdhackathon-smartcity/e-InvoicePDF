@@ -1,13 +1,18 @@
-﻿using iTextSharp.text.pdf;
+﻿using iTextSharp.text;
+using iTextSharp.text.html.simpleparser;
+using iTextSharp.text.pdf;
 using iTextSharp.xmp.impl;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using TheArtOfDev.HtmlRenderer.PdfSharp;
 
 namespace eInvoicePdf.Console
 {
@@ -220,6 +225,89 @@ namespace eInvoicePdf.Console
             }
             dest.InvoiceLine = lines.ToArray();
             return dest;
+        }
+
+        public void createPdf(InvoiceViewModel invoice)
+        {
+            Document document = new Document();
+            try
+            {
+
+                string invoiceHtml = LoadInvoiceHtml(invoice);
+                //string invoiceLineHtml = LoadInvoiceLineHtml();
+
+                StringBuilder lines = new StringBuilder();
+                decimal grandTotal = 0;
+                foreach (var item in invoice.Lines)
+                {
+                    lines.AppendLine(LoadInvoiceLineHtml(item));
+                    grandTotal += (item.PriceAmount * item.InvoicedQuantity);
+                }
+
+                invoiceHtml = invoiceHtml.Replace("@InvoiceLine", lines.ToString()).Replace("@GrandTotal", grandTotal.ToString());
+                var htmlFile = @"C:\eInvoicePdf\xtra\_tmp.html";
+                File.WriteAllText(htmlFile, invoiceHtml);
+                Process.Start("wkhtmltopdf.exe", "\"C:\\eInvoicePdf\\xtra\\_tmp.html\"  \"C:\\eInvoicePdf\\out\\generated.pdf\"");
+
+
+                //PdfWriter.GetInstance(document, new FileStream(@"C:\eInvoicePdf\Out\generated.pdf", FileMode.Create));
+                //document.Open();
+                //var worker = new iTextSharp.text.html.simpleparser.HTMLWorker(document);
+                //worker.Parse(new StringReader(invoiceHtml));
+                //document.Close();
+
+                //PdfSharp.Pdf.PdfDocument pdf = PdfGenerator.GeneratePdf(invoiceHtml, PdfSharp.PageSize.A4);
+                //pdf.Save(@"C:\eInvoicePdf\Out\generated.pdf");
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public string LoadInvoiceHtml(InvoiceViewModel item)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = assembly.GetName().Name + ".Invoice.html";
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                var pattern = reader.ReadToEnd();
+                var result = pattern.Replace("@InvoiceType", item.InvoiceType)
+                    .Replace("@Supplier", item.Supplier.Name)
+                    .Replace("@InvoiceId", item.ID)
+                    .Replace("@Reason", item.Reason)
+                    .Replace("@IssueDate", item.IssueDate.ToShortDateString())
+                    .Replace("@VAT", item.Supplier.VAT)
+                    .Replace("@Address", item.Supplier.StreetName + " " + item.Supplier.BuildingNumber.ToString())
+                    .Replace("@TaxationAuthority", item.Supplier.TaxationAuthority)
+                    .Replace("@CityName", item.Supplier.CityName)
+                    .Replace("@IndustryClassification", item.Supplier.IndustryClassificationName)
+                    .Replace("@PostalZone", item.Supplier.PostalZone);
+                return result;
+            }
+        }
+
+        public string LoadInvoiceLineHtml(InvoiceLineViewModel item)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = assembly.GetName().Name + ".InvoiceLine.html";
+            
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                var pattern =  reader.ReadToEnd();
+                var result = pattern.Replace("@CPV", item.UUID)
+                    .Replace("@ItemName", item.ItemName.ToString())
+                    .Replace("@UnitCode", item.UnitCode)
+                    .Replace("@PriceAmount", item.PriceAmount.ToString())
+                    .Replace("@InvoicedQuantity", item.InvoicedQuantity.ToString())
+                    .Replace("@Tax", item.TaxAmount.ToString())
+                    .Replace("@LineTotal", (item.PriceAmount * item.InvoicedQuantity).ToString());
+                return result;
+            }
+
         }
     }
 }
