@@ -1,10 +1,11 @@
-﻿
+﻿@using eInvoicePdf.Console;
+@model IEnumerable<InvoiceViewModel>
 
 
-    @foreach (var item in Model)
+    @foreach (var item in Model.ToList())
     {
         <tr>
-            <td></td>
+            <td>item.Supplier.Name</td>
             <td></td>
             <td></td>
             <td></td>

@@ -4,11 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using eInvoicePdf.Console;
 
 namespace e_Invoice.Mvc.Controllers
 {
     public class HomeController : Controller
     {
+        InvoiceService invoiceService = new eInvoicePdf.Console.InvoiceService();
+
         public ActionResult Index()
         {
             return View();
@@ -40,6 +43,7 @@ namespace e_Invoice.Mvc.Controllers
 
         public ActionResult _UploadPdf()
         {
+            List<InvoiceViewModel> invoices = new List<InvoiceViewModel>();
             if (Request.Files.Count > 0)
             {
                 try
@@ -54,16 +58,25 @@ namespace e_Invoice.Mvc.Controllers
                         HttpPostedFileBase file = files[i];
                         string fname;
 
+
+                        fname = file.FileName;
+
                         
-                            fname = file.FileName;
-                       
 
                         // Get the complete folder path and store the file inside it.  
                         fname = Path.Combine(Server.MapPath("~/In/"), fname);
                         file.SaveAs(fname);
+
+                        string[] filess = Directory.GetFiles(Server.MapPath("~/In/"));
+
+                      
+                        foreach (var item in filess)
+                        {
+                            FileInfo fileIn = new FileInfo(item);
+                            invoices.Add(invoiceService.LoadFromFile(fileIn));
+                        }
+                       
                     }
-                    // Returns message that successfully uploaded  
-                    return Json("File Uploaded Successfully!");
                 }
                 catch (Exception ex)
                 {
@@ -71,7 +84,7 @@ namespace e_Invoice.Mvc.Controllers
                 }
             }
 
-            return PartialView();
+            return PartialView(invoices);
         }
 
 

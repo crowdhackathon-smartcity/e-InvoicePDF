@@ -11,7 +11,7 @@ using System.Xml.Serialization;
 namespace eInvoicePdf.Console
 {
 
-    class InvoiceService
+    public class InvoiceService
     {
         IList<IndustryClassificationCodeViewModel> getIndustryClassificationCodes()
         {

@@ -50,7 +50,7 @@ namespace eInvoicePdf.Console
 
     }
 
-    class InvoiceViewModel
+    public class InvoiceViewModel
     {
         public string ID { get; set; }
         public DateTime IssueDate { get; set; }
@@ -63,7 +63,7 @@ namespace eInvoicePdf.Console
 
     }
 
-    class PartyViewModel
+    public class PartyViewModel
     {
         public string AccountID { get; set; }
         public string Name { get; set; }
@@ -83,7 +83,7 @@ namespace eInvoicePdf.Console
         public string Desc { get; set; }
     }
 
-    class InvoiceLineViewModel
+    public class InvoiceLineViewModel
     {
 
         public string ID { get; set; }

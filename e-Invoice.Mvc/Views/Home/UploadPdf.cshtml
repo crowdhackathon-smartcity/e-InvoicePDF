@@ -56,7 +56,7 @@
                             $("#divPdfUploads").html(result);
                         },
                         error: function (err) {
-                            alert(err.statusText);
+                            console.log(err.responseText);
                         }
                     })
                 })
