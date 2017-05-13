@@ -43,7 +43,7 @@ namespace eInvoicePdf.Console
     }
 
 
-    class InvoiceTypeViewModel
+   public class InvoiceTypeViewModel
     {
         public string Code { get; set; }
         public string Desc { get; set; }

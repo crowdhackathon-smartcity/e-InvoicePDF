@@ -10,7 +10,7 @@ namespace e_Invoice.Mvc.Controllers
 {
     public class HomeController : Controller
     {
-        InvoiceService invoiceService = new eInvoicePdf.Console.InvoiceService();
+        InvoiceService invoiceService = new InvoiceService();
 
         public ActionResult Index()
         {
@@ -73,7 +73,8 @@ namespace e_Invoice.Mvc.Controllers
                         foreach (var item in filess)
                         {
                             FileInfo fileIn = new FileInfo(item);
-                            invoices.Add(invoiceService.LoadFromFile(fileIn));
+                            //invoices.Add(invoiceService.LoadFromFile(fileIn));
+                            invoices.Add(new InvoiceViewModel() { Supplier = new PartyViewModel { Name = "kostas" } });
                         }
                        
                     }

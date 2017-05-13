@@ -9,20 +9,12 @@
 
 <h2>Παραστατικά</h2>
 
-<table class="table table-hover">
-    <thead>
-    <th>Αριθμός Παραστατικού</th>
-    <th>Ημερομηνία Έκδοσης</th>
-    <th>Επωνυμία Προμηθευτή</th>
-    <th>ΑΦΜ</th>
-    <th>Αιτιολογία</th>
-    <th>Συνολική Αξία</th>
-    </thead>
+
     <div id="divPdfUploads">
 
     </div>
 
-</table>
+
 
     <input type="file" name="fileUpload" value="fileUpload" id="fileUpload">
     <button id="btnUploadPdf" class="btn btn-primary" type="submit">Button</button>
@@ -56,7 +48,7 @@
                             $("#divPdfUploads").html(result);
                         },
                         error: function (err) {
-                            console.log(err.responseText);
+                            alert(err.responseText);
                         }
                     })
                 })

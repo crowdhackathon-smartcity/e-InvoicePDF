@@ -197,6 +197,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -217,7 +218,6 @@
     <ProjectReference Include="..\eInvoicePdf.Console\eInvoicePdf.Console.csproj">
       <Project>{b721b463-6a25-4ce1-8b11-17a68f9d11cf}</Project>
       <Name>eInvoicePdf.Console</Name>
-      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
