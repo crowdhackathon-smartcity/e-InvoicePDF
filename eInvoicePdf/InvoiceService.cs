@@ -359,7 +359,13 @@ namespace eInvoicePdf
                     WorkingDirectory = settings.Get("WorkingDirectory"),
                     Color = settings.Get("Color"),
                     Name = settings.Get("PartyName"),
-                    VAT = settings.Get("VAT")
+                    VAT = settings.Get("VAT"),
+                    StreetName = settings.Get("StreetName"),
+                    BuildingNumber = settings.Get("BuildingNumber"),
+                    CityName = settings.Get("CityName"),
+                    TaxationAuthority = settings.Get("TaxationAuthority"),
+                    IndustryClassification = settings.Get("IndustryClassification"),
+                    PostalZone = settings.Get("PostalZone")
                 };
             }
         }
@@ -371,5 +377,12 @@ namespace eInvoicePdf
         public string VAT { get; set; }
         public string Color { get; set; }
         public string WorkingDirectory { get; set; }
+        public string StreetName { get; set; }
+        public string BuildingNumber { get; set; }
+        public string CityName { get; set; }
+        public string TaxationAuthority { get; set; }
+        public string IndustryClassification { get; set; }
+        public string PostalZone { get; set; }
+
     }
 }
