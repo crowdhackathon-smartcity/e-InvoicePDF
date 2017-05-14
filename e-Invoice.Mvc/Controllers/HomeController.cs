@@ -109,6 +109,7 @@ namespace e_Invoice.Mvc.Controllers
 
         public ActionResult CreatPdf(PdfreateViewModel pdfreateViewModel)
         {
+
            //invoiceService.WriteToFile();
             return RedirectToAction("CreateParastastiko");
         }
