@@ -127,6 +127,7 @@ namespace e_Invoice.Mvc.Controllers
         public InvoiceViewModel MapToInvoiceViewModel(PdfCreateViewModel pdfreateViewModel)
         {
             InvoiceViewModel invoiceViewModel = new InvoiceViewModel();
+            invoiceViewModel.Supplier = new PartyViewModel();
 
             invoiceViewModel.ID = pdfreateViewModel.AA;
             invoiceViewModel.InvoiceType = pdfreateViewModel.Kind;
@@ -138,6 +139,7 @@ namespace e_Invoice.Mvc.Controllers
             invoiceViewModel.Supplier.StreetName = pdfreateViewModel.Address;
             invoiceViewModel.Supplier.PostalZone = pdfreateViewModel.Tk;
             invoiceViewModel.Supplier.Name = pdfreateViewModel.Name;
+            invoiceViewModel.Supplier.BuildingNumber = pdfreateViewModel.BuildingNumber;
             invoiceViewModel.Supplier.IndustryClassificationCode = pdfreateViewModel.Industrycode;
             invoiceViewModel.Supplier.IndustryClassificationName = pdfreateViewModel.Job;
             invoiceViewModel.Lines = pdfreateViewModel.Lines.ToArray();

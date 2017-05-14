@@ -308,7 +308,7 @@ namespace eInvoicePdf
 
                 var pdfFile = Path.Combine(OutDir.FullName, invoice.Filename);
                 //Process.Start("wkhtmltopdf.exe", "\"C:\\eInvoicePdf\\xtra\\_tmp.html\"  \"C:\\eInvoicePdf\\out\\generated.pdf\"");
-                Process.Start("wkhtmltopdf.exe", "\"" + htmlFile + "\"  " + "\"" + pdfFile + "\"");
+                Process.Start("~\\bin\\wkhtmltopdf.exe", "\"" + htmlFile + "\"  " + "\"" + pdfFile + "\"");
 
                 System.Threading.Thread.Sleep(500);
 
