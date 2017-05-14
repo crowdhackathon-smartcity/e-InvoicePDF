@@ -87,7 +87,7 @@
                     <label for="exampleInputEmail1" class="white">Λίστα με είδη: </label>
                 </div>
                 <div style="background: @InvoiceService.Profile.Color;">
-                    <table id="itemsTable" class="col-md-4" style="background: @InvoiceService.Profile.Color;">
+                    <table id="itemsTable" class="col-md-12" style="background: @InvoiceService.Profile.Color;">
                         <thead>
                             <tr>
                                 <th class="white">CPV</th>
@@ -178,6 +178,7 @@
             Afm: $("#afm").val(),
             Doy: $("#dou").val(),
             Address: $("#address").val(),
+            BuildingNumber : $("#addressnumber").val(),
             City: $("#city").val(),
             Tk: $("#tk").val(),
             Job: $("#job").val(),
@@ -195,7 +196,9 @@
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(myObj),
             success: function (result) {
-                $('#modal-container').modal('hide');
+                console.log(window.location.href);
+                window.location.reload();
+                //window.location(window.location.href + "Home/CreateParastastiko");
                 
             },
             error: function (err) {

@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using e_Invoice.Mvc.Models;
 using eInvoicePdf;
+using System.Configuration;
 
 namespace e_Invoice.Mvc.Controllers
 {
@@ -54,7 +55,8 @@ namespace e_Invoice.Mvc.Controllers
                 fname = file.FileName;
 
                 // Get the complete folder path and store the file inside it.  
-                fname = Path.Combine(@"C:\\eInvoicePdf\\In", fname);
+                var workingdirectory = ConfigurationManager.AppSettings.Get("WorkingDirectory");
+                fname = Path.Combine(workingdirectory, fname);
                 file.SaveAs(fname);
             }
            
@@ -119,14 +121,16 @@ namespace e_Invoice.Mvc.Controllers
         public ActionResult CreatePdf(PdfCreateViewModel pdfreateViewModel)
         {
             invoiceService.CreatePdf(MapToInvoiceViewModel(pdfreateViewModel));
-            
-           //invoiceService.WriteToFile();
-            return RedirectToAction("CreateParastastiko");
+            IList<InvoiceViewModel> invoices = new List<InvoiceViewModel>();
+            invoices = invoiceService.LoadFromIn();
+            //invoiceService.WriteToFile();
+            return View("CreateParastastiko", invoices);
         }
 
         public InvoiceViewModel MapToInvoiceViewModel(PdfCreateViewModel pdfreateViewModel)
         {
             InvoiceViewModel invoiceViewModel = new InvoiceViewModel();
+            invoiceViewModel.Supplier = new PartyViewModel();
 
             invoiceViewModel.ID = pdfreateViewModel.AA;
             invoiceViewModel.InvoiceType = pdfreateViewModel.Kind;
@@ -138,6 +142,7 @@ namespace e_Invoice.Mvc.Controllers
             invoiceViewModel.Supplier.StreetName = pdfreateViewModel.Address;
             invoiceViewModel.Supplier.PostalZone = pdfreateViewModel.Tk;
             invoiceViewModel.Supplier.Name = pdfreateViewModel.Name;
+            invoiceViewModel.Supplier.BuildingNumber = pdfreateViewModel.BuildingNumber;
             invoiceViewModel.Supplier.IndustryClassificationCode = pdfreateViewModel.Industrycode;
             invoiceViewModel.Supplier.IndustryClassificationName = pdfreateViewModel.Job;
             invoiceViewModel.Lines = pdfreateViewModel.Lines.ToArray();

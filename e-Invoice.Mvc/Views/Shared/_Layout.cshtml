@@ -5,8 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - e-InvoicePdf</title>
+    <link rel="icon" type="image/x-icon" href="@Url.Content("~/Content/logo_new.png")">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700&amp;subset=greek" rel="stylesheet">
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -24,9 +26,6 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
                     <li>@Html.ActionLink("Εισερχόμενα", "UploadPdf", "Home")</li>
                     <li>@Html.ActionLink("Εξερχόμενα", "CreateParastastiko", "Home")</li>
                 </ul>
