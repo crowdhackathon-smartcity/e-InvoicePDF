@@ -273,7 +273,7 @@ namespace eInvoicePdf
                     grandTotal += (item.PriceAmount * item.InvoicedQuantity);
                 }
 
-                invoiceHtml = invoiceHtml.Replace("@InvoiceLine", lines.ToString()).Replace("@GrandTotal", grandTotal.ToString());
+                invoiceHtml = invoiceHtml.Replace("@InvoiceLine", lines.ToString()).Replace("@GrandTotal", grandTotal.ToString()).Replace("@PartyColor", Profile.Color);
                 var htmlFile = Path.Combine(OutDir.FullName, "_tmp.html"); //@"C:\eInvoicePdf\xtra\_tmp.html";
                 
                 File.WriteAllText(htmlFile, invoiceHtml);

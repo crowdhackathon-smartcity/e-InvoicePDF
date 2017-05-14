@@ -9,7 +9,8 @@ namespace eInvoicePdf.Console
             var service = new InvoiceService();
             var items = service.LoadFromIn();
 
-            FileInfo fi = new FileInfo(@"C:\eInvoicePdf\In\Invoice.pdf");
+            //FileInfo fi = new FileInfo(@"C:\eInvoicePdf\In\Invoice.pdf");
+            FileInfo fi = new FileInfo(Path.Combine(service.InDir.FullName, items[0].Filename));
             InvoiceViewModel dto = service.LoadFromFile(fi);
             service.CreatePdf(dto);
 
