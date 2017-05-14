@@ -160,7 +160,8 @@ namespace eInvoicePdf
                 lineDto.InvoicedQuantity = item.InvoicedQuantity.Value;
                 lineDto.VatPercentage = item.TaxTotal[0].TaxSubtotal[0].TaxCategory.Percent.Value;
                 lineDto.TaxAmount = item.TaxTotal[0].TaxSubtotal[0].TaxAmount.Value;
-                lineDto.PriceAmount = item.Price.PriceAmount.Value;
+                if (item.Price != null)
+                    lineDto.PriceAmount = item.Price.PriceAmount.Value;
                 lines.Add(lineDto);
             }
 
@@ -307,8 +308,9 @@ namespace eInvoicePdf
                 invoice.Filename = Guid.NewGuid().ToString() + ".pdf";
 
                 var pdfFile = Path.Combine(OutDir.FullName, invoice.Filename);
+                var pdfGeneratorTool = ConfigurationManager.AppSettings.Get("PdfGenerator");  //"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe";
                 //Process.Start("wkhtmltopdf.exe", "\"C:\\eInvoicePdf\\xtra\\_tmp.html\"  \"C:\\eInvoicePdf\\out\\generated.pdf\"");
-                Process.Start("wkhtmltopdf.exe", "\"" + htmlFile + "\"  " + "\"" + pdfFile + "\"");
+                Process.Start(pdfGeneratorTool, "\"" + htmlFile + "\"  " + "\"" + pdfFile + "\"");
 
                 System.Threading.Thread.Sleep(500);
 
