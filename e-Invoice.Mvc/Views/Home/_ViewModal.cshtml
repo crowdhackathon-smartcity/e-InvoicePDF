@@ -1,4 +1,4 @@
-﻿@using e_Invoice.Mvc.Models;
+﻿@using eInvoicePdf;
 @model IEnumerable<InvoiceViewModel>
 
 <div class="modal-body">
@@ -27,7 +27,7 @@
                 <div class="row blue">
                     <div class="form-group col-md-4">
                         <label for="exampleInputEmail1">Κωδικός: </label>
-                        <input type="password" class="form-control" id="password" placeholder="">
+                        <input type="text" class="form-control" id="industrycode" placeholder="">
                     </div>
                     <div class="form-group col-md-4">
                         <label for="exampleInputPassword1">Επωνυμία: </label>
@@ -81,26 +81,18 @@
                 <div class="row blue">
                     <table id="itemsTable" class="col-md-4">
                         <thead>
-                            <th>CPV</th>
-                            <th>Περιγραφή</th>
-                            <th>ΜΜ</th>
-                            <th>Αξία</th>
-                            <th>Ποσότητα</th>
-                            <th>Έκπτωση</th>
-                            <th>ΦΠΑ</th>
-                            <th>Συνολική Αξία</th>
+                            <tr>
+                                <th>CPV</th>
+                                <th>Περιγραφή</th>
+                                <th>Μονάδα Μέτρησης</th>
+                                <th>Ποσότητα</th>
+                                <th>Αξία</th>
+                                <th>Έκπτωση</th>
+                                <th>ΦΠΑ</th>
+                                @*<th>Συνολική Αξία</th>*@
+                            </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><input type="text" /></td>
-                                <td><input type="text" /></td>
-                                <td><input type="text" /></td>
-                                <td><input type="text" /></td>
-                                <td><input type="text" /></td>
-                                <td><input type="text" /></td>
-                                <td><input type="text" /></td>
-                                <td><input type="text" /></td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -128,48 +120,75 @@
         $('.addItem').on('click', function (e) {
             e.preventDefault();
             $('#itemsTable tbody').append(
-                '<tr><td><input type="text"/></td><td><input type="text"/></td><td><input type="text"/></td><td><input type="text"/></td><td><input type="text"/></td><td><input type="text"/></td><td><input type="text"/></td><td><input type="text"/></td></tr>');
+                '<tr> ' +
+                    '<td><input type="text" class="UUID"/></td>' +
+                    '<td><input type="text" class="ItemName"/></td>' +
+                    '<td><input type="text" class="UnitCode"/></td>' +
+                    '<td><input type="text" class="InvoicedQuantity"/></td>' +
+                    '<td><input type="text" class="PriceAmount"/></td>' +
+                    '<td><input type="text" class="VatPercentage"/></td>' +
+                    '<td><input type="text" class="TaxAmount"/></td>' +
+                '</tr>');
         });
+        $('.addItem').trigger('click');
     });
-
+    /*
+    public string ID { get; set; }
+        public string UUID { get; set; }
+        public string ItemName { get; set; }
+        public string UnitCode { get; set; }
+        public decimal InvoicedQuantity { get; set; }
+        public decimal PriceAmount { get; set; }
+        public decimal VatPercentage { get; set; }
+        public decimal TaxAmount { get; set; }*/
 </script>
 @*8a ginetai store i forma*@
 <script type="text/javascript">
-    $("#approve-btn").click(function()  {
+    $("#approve-btn").click(function ()  {
+        ////menei datepicker kai lista proiontwn
+        //event.preventDefault();
 
-
-        var items = [];
+        var invoiceLines = [];
         $('#itemsTable tbody tr').each(function () {
-            $(this).find('td').each(function() {
-                console.log($(this).find('input').val());
-            });
+            var invoiceLine = {
+                UUID: $(this).find(".UUID").val(),
+                ItemName: $(this).find(".ItemName").val(),
+                UnitCode: $(this).find(".UnitCode").val(),
+                InvoicedQuantity: $(this).find(".InvoicedQuantity").val(),
+                PriceAmount: $(this).find(".PriceAmount").val(),
+                VatPercentage: $(this).find(".VatPercentage").val(),
+                TaxAmount: $(this).find(".TaxAmount").val()
+            };
+            invoiceLines.push(invoiceLine);
         });
 
 
+
+
         var myObj = {
-            "AA": $("#aa").val(),
-            "Aitiologia": $("#aitiologia").val(),
-            "Password": $("#password").val(),
-            "Name": $("#name").val(),
-            "Afm": $("#afm").val(),
-            "Doy": $("#dou").val()
-            "Address": $("#address").val(),
-            "City": $("#city").val(),
-            "Tk": $("#tk").val(),
-            "Job": $("#job").val(),
-            "Date": $('.datepicker').datepicker(),
-            "Kind":$('#kind').select2();
-        }
+            AA: $("#aa").val(),
+            Aitiologia: $("#aitiologia").val(),
+            Industrycode: $("#industrycode").val(),
+            Name: $("#name").val(),
+            Afm: $("#afm").val(),
+            Doy: $("#dou").val(),
+            Address: $("#address").val(),
+            City: $("#city").val(),
+            Tk: $("#tk").val(),
+            Job: $("#job").val(),
+            Date: $('.datepicker').val(),
+            Kind: $('#kind').val(),
+            Lines: invoiceLines
+        };
 
-        var myJSON = JSON.stringify(myObj);
-
+   
+        console.log(myObj);
      
         $.ajax({
             url: '/Home/CreatePdf',
             type: "POST",
-            contentType: false, // Not to set any content header
-            processData: false, // Not to process data
-            data: myJSON,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(myObj),
             success: function (result) {
                 $('#modal-container').modal('hide');
                 
@@ -179,7 +198,5 @@
                 //alert(err.responseText);
             }
         })
-        //menei datepicker kai lista proiontwn
-        event.preventDefault();
     });
 </script>
