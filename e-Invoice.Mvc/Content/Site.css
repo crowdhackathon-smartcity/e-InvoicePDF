@@ -35,3 +35,15 @@ select,
 textarea {
     max-width: 280px;
 }
+
+#itemsTable input {
+    max-width: 144px;
+}
+    
+.txt-center {
+    text-align: center;
+}
+
+.blue {
+    background: #FAFAD2;
+}

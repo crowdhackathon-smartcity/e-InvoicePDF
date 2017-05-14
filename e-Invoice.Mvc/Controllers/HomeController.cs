@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using e_Invoice.Mvc.Models;
+using eInvoicePdf;
+
 namespace e_Invoice.Mvc.Controllers
 {
     public class HomeController : Controller
@@ -38,36 +40,24 @@ namespace e_Invoice.Mvc.Controllers
         }
         public ActionResult UploadPdf()
         {
-            List<InvoiceViewModel> invoices = new List<InvoiceViewModel>();
-            string[] filess = Directory.GetFiles(Server.MapPath("~/In/"));
-            foreach (var item in filess)
-            {
-                FileInfo fileIn = new FileInfo(item);
-                invoices.Add(invoiceService.LoadFromFile(fileIn));
-
-            }
+            IList<InvoiceViewModel> invoices = new List<InvoiceViewModel>();
+            invoices = invoiceService.LoadFromIn();
             return View(invoices);
         }
         [HttpPost]
         public ActionResult UploadPdf(HttpPostedFileBase file)
         {
-            List<InvoiceViewModel> invoices = new List<InvoiceViewModel>();
+            IList<InvoiceViewModel> invoices = new List<InvoiceViewModel>();
             string fname;
             fname = file.FileName;
 
 
 
             // Get the complete folder path and store the file inside it.  
-            fname = Path.Combine(Server.MapPath("~/In/"), fname);
+            fname = Path.Combine(@"C:\\eInvoicePdf\\In", fname);
             file.SaveAs(fname);
 
-            string[] filess = Directory.GetFiles(Server.MapPath("~/In/"));
-            foreach (var item in filess)
-            {
-                FileInfo fileIn = new FileInfo(item);
-                invoices.Add(invoiceService.LoadFromFile(fileIn));
-
-            }
+            invoices = invoiceService.LoadFromIn();
             return View(invoices);
         }
 
@@ -119,8 +109,9 @@ namespace e_Invoice.Mvc.Controllers
             return View();
         }
 
-        public ActionResult CreatPdf(PdfreateViewModel pdfreateViewModel)
+        public ActionResult CreatPdf(PdfCreateViewModel pdfreateViewModel)
         {
+
            //invoiceService.WriteToFile();
             return RedirectToAction("CreateParastastiko");
         }
