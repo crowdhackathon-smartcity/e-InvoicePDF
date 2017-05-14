@@ -35,3 +35,11 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.txt-center {
+    text-align: center;
+}
+
+.blue {
+    background: #FAFAD2;
+}
