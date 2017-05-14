@@ -160,6 +160,7 @@ namespace eInvoicePdf
                 lineDto.InvoicedQuantity = item.InvoicedQuantity.Value;
                 lineDto.VatPercentage = item.TaxTotal[0].TaxSubtotal[0].TaxCategory.Percent.Value;
                 lineDto.TaxAmount = item.TaxTotal[0].TaxSubtotal[0].TaxAmount.Value;
+                lineDto.PriceAmount = item.Price.PriceAmount.Value;
                 lines.Add(lineDto);
             }
 
@@ -274,6 +275,7 @@ namespace eInvoicePdf
                                         }
                                       }
                 };
+                line.Price = new PriceType { PriceAmount = new PriceAmountType { Value = item.PriceAmount } };
                 lines.Add(line);
             }
             dest.InvoiceLine = lines.ToArray();
