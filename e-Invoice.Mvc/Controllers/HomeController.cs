@@ -48,14 +48,16 @@ namespace e_Invoice.Mvc.Controllers
         public ActionResult UploadPdf(HttpPostedFileBase file)
         {
             IList<InvoiceViewModel> invoices = new List<InvoiceViewModel>();
-            string fname;
-            fname = file.FileName;
+            if (file != null)
+            {
+                string fname;
+                fname = file.FileName;
 
-
-
-            // Get the complete folder path and store the file inside it.  
-            fname = Path.Combine(@"C:\\eInvoicePdf\\In", fname);
-            file.SaveAs(fname);
+                // Get the complete folder path and store the file inside it.  
+                fname = Path.Combine(@"C:\\eInvoicePdf\\In", fname);
+                file.SaveAs(fname);
+            }
+           
 
             invoices = invoiceService.LoadFromIn();
             return View(invoices);
@@ -109,7 +111,7 @@ namespace e_Invoice.Mvc.Controllers
             return View();
         }
 
-        public ActionResult CreatPdf(PdfCreateViewModel pdfreateViewModel)
+        public ActionResult CreatePdf(PdfCreateViewModel pdfreateViewModel)
         {
 
            //invoiceService.WriteToFile();
