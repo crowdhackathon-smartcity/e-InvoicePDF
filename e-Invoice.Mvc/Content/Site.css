@@ -47,3 +47,18 @@ textarea {
 .blue {
     background: #FAFAD2;
 }
+
+.white {
+    color: #fff;
+}
+
+.black {
+    background: black;
+}
+
+
+.navbar-inverse .navbar-nav > li > a  {
+    color: #fff;
+}
+
+.navbar-inverse .navbar-brand, .navbar-inverse .navbar-brand { color: #fff; }
