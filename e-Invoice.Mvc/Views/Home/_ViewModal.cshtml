@@ -72,8 +72,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <button class="addItem">+</button>
-                    <label for="exampleInputEmail1">Λίστα είδη: </label>
+                    <button class="addItem btn btn-primary active">+</button>
+                    <label for="exampleInputEmail1">Λίστα με είδη: </label>
                     <table id="itemsTable">
                         <thead>
                         <th>CPV</th>
@@ -146,7 +146,40 @@
                 console.log($(this).find('input').val());
             });
         });
-        
+
+
+        var myObj = {
+            "AA": $("#aa").val(),
+            "Aitiologia": $("#aitiologia").val(),
+            "Password": $("#password").val(),
+            "Name": $("#name").val(),
+            "Afm": $("#afm").val(),
+            "Doy": $("#dou").val()
+            "Address": $("#address").val(),
+            "City": $("#city").val(),
+            "Kind": $("#kind").val()
+            "Tk": $("#tk").val(),
+            "Job": $("#job").val()
+        }
+
+        var myJSON = JSON.stringify(myObj);
+
+     
+        $.ajax({
+            url: '/Home/CreatePdf',
+            type: "POST",
+            contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+            data: myJSON,
+            success: function (result) {
+                $('#modal-container').modal('hide');
+                
+            },
+            error: function (err) {
+                console.log(err.responseText);
+                //alert(err.responseText);
+            }
+        })
         //menei datepicker kai lista proiontwn
         event.preventDefault();
     });

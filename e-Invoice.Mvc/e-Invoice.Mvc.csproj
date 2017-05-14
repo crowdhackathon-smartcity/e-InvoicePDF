@@ -200,7 +200,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\InvoicesList.cshtml" />
     <Content Include="Views\Home\_ViewModal.cshtml" />
     <Content Include="Views\Home\CreateParastastiko.cshtml" />
     <Content Include="Views\Home\UploadPdf.cshtml" />
