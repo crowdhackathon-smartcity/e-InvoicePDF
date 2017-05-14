@@ -1,4 +1,4 @@
-﻿@using eInvoicePdf;
+﻿@using e_Invoice.Mvc.Models;
 @model IEnumerable<InvoiceViewModel>
 
 <div class="modal-body">
@@ -55,9 +55,12 @@
                     </div>
                     <div class="form-group col-md-4">
                         <label for="exampleInputEmail1">Είδος: </label>
-                        <select id="kind">
-                            <option></option>
-                            <option value="1">1</option>
+                        <select id="kind" style="width: 236px;">
+                            <option value=""></option>
+                            <option value="01">ΤΙΜΟΛΟΓΙΟ</option>
+                            <option value="02">ΑΠΟΔΕΙΞΗ ΠΑΡΟΧΗΣ ΥΠΗΡΕΣΙΩΝ</option>
+                            <option value="03">ΠΙΣΤΩΤΙΚΟ ΤΙΜΟΛΟΓΙΟ</option>
+
                         </select>
                     </div>
                     <div class="form-group col-md-4">
@@ -72,30 +75,32 @@
                     </div>
                 </div>
                 <div class="row blue">
-                    <button class="addItem btn btn-info">+</button>
+                    <button class="addItem btn btn-info" style="margin-left: 15px;margin-bottom: 10px;">+</button>
                     <label for="exampleInputEmail1">Λίστα με είδη: </label>
-                    <table id="itemsTable">
+                </div>
+                <div class="row blue">
+                    <table id="itemsTable" class="col-md-4">
                         <thead>
-                        <th>CPV</th>
-                        <th>Περιγραφή</th>
-                        <th>ΜΜ</th>
-                        <th>Αξία</th>
-                        <th>Ποσότητα</th>
-                        <th>Έκπτωση</th>
-                        <th>ΦΠΑ</th>
-                        <th>Συνολική Αξία</th>
+                            <th>CPV</th>
+                            <th>Περιγραφή</th>
+                            <th>ΜΜ</th>
+                            <th>Αξία</th>
+                            <th>Ποσότητα</th>
+                            <th>Έκπτωση</th>
+                            <th>ΦΠΑ</th>
+                            <th>Συνολική Αξία</th>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td><input type="text"/></td>
-                            <td><input type="text"/></td>
-                            <td><input type="text"/></td>
-                            <td><input type="text"/></td>
-                            <td><input type="text"/></td>
-                            <td><input type="text"/></td>
-                            <td><input type="text"/></td>
-                            <td><input type="text"/></td>
-                        </tr>
+                            <tr>
+                                <td><input type="text" /></td>
+                                <td><input type="text" /></td>
+                                <td><input type="text" /></td>
+                                <td><input type="text" /></td>
+                                <td><input type="text" /></td>
+                                <td><input type="text" /></td>
+                                <td><input type="text" /></td>
+                                <td><input type="text" /></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -150,10 +155,10 @@
             "Doy": $("#dou").val()
             "Address": $("#address").val(),
             "City": $("#city").val(),
-            "Kind": $("#kind").val()
             "Tk": $("#tk").val(),
             "Job": $("#job").val(),
-            "cpvs": $("#job").val()
+            "Date": $('.datepicker').datepicker(),
+            "Kind":$('#kind').select2();
         }
 
         var myJSON = JSON.stringify(myObj);

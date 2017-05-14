@@ -22,7 +22,7 @@ namespace eInvoicePdf
         public IList<IndustryClassificationCodeViewModel> getIndustryClassificationCodes()
         {
             var retList = new List<IndustryClassificationCodeViewModel>();
-            retList.Add( new IndustryClassificationCodeViewModel() {Code = "62.01.11.03", Desc = "Υπηρεσίες ανάπτυξης λογισμικού πολυμέσων" });
+            retList.Add(new IndustryClassificationCodeViewModel() { Code = "62.01.11.03", Desc = "Υπηρεσίες ανάπτυξης λογισμικού πολυμέσων" });
             retList.Add(new IndustryClassificationCodeViewModel() { Code = "71.12.19.04", Desc = "Υπηρεσίες μελετών λιμενικών έργων" });
             retList.Add(new IndustryClassificationCodeViewModel() { Code = "46.47.1", Desc = "Χονδρικό εμπόριο επίπλων" });
             return retList;
@@ -39,23 +39,47 @@ namespace eInvoicePdf
 
         public IList<InvoiceViewModel> LoadFromIn()
         {
-            return LoadFromDirectory(new DirectoryInfo(@"C:\eInvoicePdf\In"));
+            return LoadFromDirectory(InDir);
         }
 
         public IList<InvoiceViewModel> LoadFromOut()
         {
-            return LoadFromDirectory(new DirectoryInfo(@"C:\eInvoicePdf\Out"));
+            return LoadFromDirectory(OutDir);
         }
 
         public IList<InvoiceViewModel> LoadFromDirectory(DirectoryInfo dir)
         {
             var files = dir.EnumerateFiles("*.pdf").ToList();
-            var retList =  new List<InvoiceViewModel>();
+            var retList = new List<InvoiceViewModel>();
             foreach (var item in files)
             {
                 retList.Add(LoadFromFile(item));
             }
             return retList;
+        }
+
+        public DirectoryInfo OutDir
+        {
+            get
+            {
+                var dirPath = @"C:\eInvoicePdf\Out";
+                if (!Directory.Exists(dirPath))
+                    Directory.CreateDirectory(dirPath);
+
+                return new DirectoryInfo(dirPath);
+            }
+        }
+
+        public DirectoryInfo InDir
+        {
+            get
+            {
+                var dirPath = @"C:\eInvoicePdf\In";
+                if (!Directory.Exists(dirPath))
+                    Directory.CreateDirectory(dirPath);
+
+                return new DirectoryInfo(dirPath);
+            }
         }
 
         public InvoiceViewModel LoadFromFile(FileInfo file)
@@ -125,10 +149,10 @@ namespace eInvoicePdf
             return dest;
         }
 
-        public void WriteToFile(InvoiceViewModel dto, FileInfo fi)
+        public void Merge(InvoiceViewModel dto, FileInfo inPdf)
         {
-            var tmpFilename = fi.FullName + "_tmp";
-            File.Copy(fi.FullName, tmpFilename, true);
+            var tmpFilename = inPdf.FullName + "_tmp";
+            File.Copy(inPdf.FullName, tmpFilename, true);
             //FileStream fs = fi.Open(FileMode.Open);
             //FileStream fs = new FileStream(tmpFilename, FileMode.Open);
             PdfReader reader = new PdfReader(tmpFilename);
@@ -142,11 +166,15 @@ namespace eInvoicePdf
             string ublKey = "e:file";
 
 
-            XmpCore.IXmpMeta meta = XmpCore.XmpMetaFactory.ParseFromBuffer(metadata);
+            XmpCore.IXmpMeta meta = null;
+            if (meta != null)
+                meta = XmpCore.XmpMetaFactory.ParseFromBuffer(metadata);
+            else
+                meta = XmpCore.XmpMetaFactory.Create();
             //string content = meta.GetPropertyString(ns, ublKey);
 
             //if (! XmpCore.XmpMetaFactory.SchemaRegistry.Namespaces.an)
-            //XmpCore.XmpMetaFactory.SchemaRegistry.RegisterNamespace(targetNs, "e");
+            XmpCore.XmpMetaFactory.SchemaRegistry.RegisterNamespace(ns, "e");
             var invoice = Convert2Invoice(dto);
             var content = string.Empty;
 
@@ -162,7 +190,7 @@ namespace eInvoicePdf
 
             meta.SetProperty(ns, ublKey, content);
 
-            PdfStamper stamper = new PdfStamper(reader, new FileStream(fi.FullName, FileMode.Create));
+            PdfStamper stamper = new PdfStamper(reader, new FileStream(inPdf.FullName, FileMode.Create));
             XmpCore.Options.SerializeOptions opts = new XmpCore.Options.SerializeOptions();
             metadata = XmpCore.XmpMetaFactory.SerializeToBuffer(meta, opts);
             stamper.XmpMetadata = metadata;
@@ -227,7 +255,7 @@ namespace eInvoicePdf
             return dest;
         }
 
-        public void createPdf(InvoiceViewModel invoice)
+        public void CreatePdf(InvoiceViewModel invoice)
         {
             Document document = new Document();
             try
@@ -245,10 +273,19 @@ namespace eInvoicePdf
                 }
 
                 invoiceHtml = invoiceHtml.Replace("@InvoiceLine", lines.ToString()).Replace("@GrandTotal", grandTotal.ToString());
-                var htmlFile = @"C:\eInvoicePdf\xtra\_tmp.html";
+                var htmlFile = Path.Combine(OutDir.FullName, "_tmp.html"); //@"C:\eInvoicePdf\xtra\_tmp.html";
+                
                 File.WriteAllText(htmlFile, invoiceHtml);
-                Process.Start("wkhtmltopdf.exe", "\"C:\\eInvoicePdf\\xtra\\_tmp.html\"  \"C:\\eInvoicePdf\\out\\generated.pdf\"");
+                //if (string.IsNullOrEmpty(invoice.Filename))
+                invoice.Filename = Guid.NewGuid().ToString() + ".pdf";
 
+                var pdfFile = Path.Combine(OutDir.FullName, invoice.Filename);
+                //Process.Start("wkhtmltopdf.exe", "\"C:\\eInvoicePdf\\xtra\\_tmp.html\"  \"C:\\eInvoicePdf\\out\\generated.pdf\"");
+                Process.Start("wkhtmltopdf.exe", "\"" + htmlFile + "\"  " + "\"" + pdfFile + "\"");
+
+                System.Threading.Thread.Sleep(500);
+
+                Merge(invoice, new FileInfo(pdfFile));
 
                 //PdfWriter.GetInstance(document, new FileStream(@"C:\eInvoicePdf\Out\generated.pdf", FileMode.Create));
                 //document.Open();
