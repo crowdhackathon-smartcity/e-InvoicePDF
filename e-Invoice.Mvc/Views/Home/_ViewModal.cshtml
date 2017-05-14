@@ -1,4 +1,4 @@
-﻿@using e_Invoice.Mvc.Models;
+﻿@using eInvoicePdf;
 @model IEnumerable<InvoiceViewModel>
 
 <div class="modal-body">
@@ -133,7 +133,7 @@
     $("#approve-btn").click(function()  {
 
 
-        var items = {};
+        var items = [];
         $('#itemsTable tbody tr').each(function () {
             $(this).find('td').each(function() {
                 console.log($(this).find('input').val());
@@ -152,7 +152,8 @@
             "City": $("#city").val(),
             "Kind": $("#kind").val()
             "Tk": $("#tk").val(),
-            "Job": $("#job").val()
+            "Job": $("#job").val(),
+            "cpvs": $("#job").val()
         }
 
         var myJSON = JSON.stringify(myObj);
