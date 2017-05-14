@@ -5,6 +5,7 @@ using iTextSharp.text.pdf;
 using iTextSharp.xmp.impl;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -62,7 +63,7 @@ namespace eInvoicePdf
         {
             get
             {
-                var dirPath = @"C:\eInvoicePdf\Out";
+                var dirPath = Path.Combine(Profile.WorkingDirectory, "Out");
                 if (!Directory.Exists(dirPath))
                     Directory.CreateDirectory(dirPath);
 
@@ -74,7 +75,7 @@ namespace eInvoicePdf
         {
             get
             {
-                var dirPath = @"C:\eInvoicePdf\In";
+                var dirPath = Path.Combine(Profile.WorkingDirectory, "In");// @"C:\eInvoicePdf\In";
                 if (!Directory.Exists(dirPath))
                     Directory.CreateDirectory(dirPath);
 
@@ -346,5 +347,29 @@ namespace eInvoicePdf
             }
 
         }
+
+        public PartyProfile Profile
+        {
+            get
+            {
+                var settings = ConfigurationManager.AppSettings;
+
+                return new PartyProfile
+                {
+                    WorkingDirectory = settings.Get("WorkingDirectory"),
+                    Color = settings.Get("Color"),
+                    Name = settings.Get("PartyName"),
+                    VAT = settings.Get("VAT")
+                };
+            }
+        }
+    }
+
+    public class PartyProfile
+    {
+        public string Name { get; set; }
+        public string VAT { get; set; }
+        public string Color { get; set; }
+        public string WorkingDirectory { get; set; }
     }
 }
