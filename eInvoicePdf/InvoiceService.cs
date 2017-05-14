@@ -38,6 +38,17 @@ namespace eInvoicePdf
             return retList;
         }
 
+        public IList<CpvViewModel> getCPVs()
+        {
+            var retList = new List<CpvViewModel>();
+            retList.Add(new CpvViewModel { Code = "30194220-3", Desc = "Μεμβράνες σχεδίασης" });
+            retList.Add(new CpvViewModel { Code = "30234500-3", Desc = "Μέσα αποθήκευσης μνήμης" });
+            retList.Add(new CpvViewModel { Code = "45262522-6", Desc = "Εργασίες τοιχοποιίας" });
+            retList.Add(new CpvViewModel { Code = "72600000-6", Desc = "Υπηρεσίες παροχής συμβουλών και υποστήριξης Η/Υ" });
+            retList.Add(new CpvViewModel { Code = "80540000-1", Desc = "Υπηρεσίες περιβαλλοντικής εκπαίδευσης" });
+            return retList;
+        }
+
         public IList<InvoiceViewModel> LoadFromIn()
         {
             return LoadFromDirectory(InDir);
@@ -136,7 +147,10 @@ namespace eInvoicePdf
                 var lineDto = new InvoiceLineViewModel();
                 lineDto.ID = item.ID.Value;
                 if (item.UUID != null)
+                {
                     lineDto.UUID = item.UUID.Value;
+                }
+
 
                 lineDto.ItemName = item.Item.Name.Value;
                 lineDto.UnitCode = item.InvoicedQuantity.unitCode;
@@ -225,7 +239,7 @@ namespace eInvoicePdf
                     }
                 }
             };
-                
+
             if (!string.IsNullOrEmpty(src.Supplier.IndustryClassificationCode))
             {
                 dest.AccountingSupplierParty.Party.IndustryClassificationCode = new IndustryClassificationCodeType { Value = src.Supplier.IndustryClassificationCode };
@@ -236,6 +250,9 @@ namespace eInvoicePdf
             {
                 var line = new InvoiceLineType();
                 line.ID = new IDType { Value = item.ID };
+                if (!string.IsNullOrEmpty(item.UUID))
+                    line.UUID = new UUIDType { Value = item.UUID };
+
                 line.InvoicedQuantity = new InvoicedQuantityType { unitCode = item.UnitCode, Value = item.InvoicedQuantity };
                 line.Item = new ItemType { Name = new NameType1 { Value = item.ItemName } };
                 line.TaxTotal = new TaxTotalType[]
@@ -275,7 +292,7 @@ namespace eInvoicePdf
 
                 invoiceHtml = invoiceHtml.Replace("@InvoiceLine", lines.ToString()).Replace("@GrandTotal", grandTotal.ToString()).Replace("@PartyColor", Profile.Color);
                 var htmlFile = Path.Combine(OutDir.FullName, "_tmp.html"); //@"C:\eInvoicePdf\xtra\_tmp.html";
-                
+
                 File.WriteAllText(htmlFile, invoiceHtml);
                 //if (string.IsNullOrEmpty(invoice.Filename))
                 invoice.Filename = Guid.NewGuid().ToString() + ".pdf";
@@ -331,11 +348,11 @@ namespace eInvoicePdf
         {
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = assembly.GetName().Name + ".InvoiceLine.html";
-            
+
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (StreamReader reader = new StreamReader(stream))
             {
-                var pattern =  reader.ReadToEnd();
+                var pattern = reader.ReadToEnd();
                 var result = pattern.Replace("@CPV", item.UUID)
                     .Replace("@ItemName", item.ItemName.ToString())
                     .Replace("@UnitCode", item.UnitCode)
@@ -348,7 +365,7 @@ namespace eInvoicePdf
 
         }
 
-        public PartyProfile Profile
+        public static PartyProfile Profile
         {
             get
             {
