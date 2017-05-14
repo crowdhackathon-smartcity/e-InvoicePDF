@@ -201,6 +201,8 @@
     <Content Include="Views\Home\_ViewModal.cshtml" />
     <Content Include="Views\Home\CreateParastastiko.cshtml" />
     <Content Include="Views\Home\UploadPdf.cshtml" />
+    <Content Include="Views\Home\AddParastatiko.cshtml" />
+    <Content Include="Views\Home\_InvoiceLine.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

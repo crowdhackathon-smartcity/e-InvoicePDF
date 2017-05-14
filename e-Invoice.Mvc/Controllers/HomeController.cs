@@ -110,12 +110,39 @@ namespace e_Invoice.Mvc.Controllers
         {
             return View();
         }
+        public ActionResult AddParastatiko()
+        {
+            return View();
+        }
 
+        [HttpPost]
         public ActionResult CreatePdf(PdfCreateViewModel pdfreateViewModel)
         {
-
+            invoiceService.CreatePdf(MapToInvoiceViewModel(pdfreateViewModel));
+            
            //invoiceService.WriteToFile();
             return RedirectToAction("CreateParastastiko");
+        }
+
+        public InvoiceViewModel MapToInvoiceViewModel(PdfCreateViewModel pdfreateViewModel)
+        {
+            InvoiceViewModel invoiceViewModel = new InvoiceViewModel();
+
+            invoiceViewModel.ID = pdfreateViewModel.AA;
+            invoiceViewModel.InvoiceType = pdfreateViewModel.Kind;
+            invoiceViewModel.IssueDate = pdfreateViewModel.Date ?? DateTime.MinValue;
+            invoiceViewModel.Reason = pdfreateViewModel.Aitiologia;
+            invoiceViewModel.Supplier.VAT = pdfreateViewModel.Afm;
+            invoiceViewModel.Supplier.CityName = pdfreateViewModel.City;
+            invoiceViewModel.Supplier.TaxationAuthority = pdfreateViewModel.Doy;
+            invoiceViewModel.Supplier.StreetName = pdfreateViewModel.Address;
+            invoiceViewModel.Supplier.PostalZone = pdfreateViewModel.Tk;
+            invoiceViewModel.Supplier.Name = pdfreateViewModel.Name;
+            invoiceViewModel.Supplier.IndustryClassificationCode = pdfreateViewModel.Industrycode;
+            invoiceViewModel.Supplier.IndustryClassificationName = pdfreateViewModel.Job;
+            invoiceViewModel.Lines = pdfreateViewModel.Lines.ToArray();
+
+            return invoiceViewModel;
         }
     }
 }
