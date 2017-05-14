@@ -56,7 +56,7 @@ namespace e_Invoice.Mvc.Controllers
 
                 // Get the complete folder path and store the file inside it.  
                 var workingdirectory = ConfigurationManager.AppSettings.Get("WorkingDirectory");
-                fname = Path.Combine(workingdirectory, fname);
+                fname = Path.Combine(workingdirectory+"\\In", fname);
                 file.SaveAs(fname);
             }
            
