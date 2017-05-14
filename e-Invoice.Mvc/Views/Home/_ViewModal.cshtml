@@ -196,7 +196,9 @@
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(myObj),
             success: function (result) {
-                $('#modal-container').modal('hide');
+                console.log(window.location.href);
+                window.location.reload();
+                //window.location(window.location.href + "Home/CreateParastastiko");
                 
             },
             error: function (err) {
