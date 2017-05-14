@@ -19,6 +19,7 @@ namespace e_Invoice.Mvc.Models
         public string Afm { get; set; }
         public string Doy { get; set; }
         public string Address { get; set; }
+        public string BuildingNumber { get; set; }
         public string City { get; set; }
         public string Kind { get; set; }
         public string Tk { get; set; }
