@@ -348,7 +348,7 @@ namespace eInvoicePdf
 
         }
 
-        public PartyProfile Profile
+        public static PartyProfile Profile
         {
             get
             {
