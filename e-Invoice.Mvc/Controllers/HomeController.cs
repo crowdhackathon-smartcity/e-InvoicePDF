@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using e_Invoice.Mvc.Models;
+using eInvoicePdf;
+
 namespace e_Invoice.Mvc.Controllers
 {
     public class HomeController : Controller
@@ -107,7 +109,7 @@ namespace e_Invoice.Mvc.Controllers
             return View();
         }
 
-        public ActionResult CreatPdf(PdfreateViewModel pdfreateViewModel)
+        public ActionResult CreatPdf(PdfCreateViewModel pdfreateViewModel)
         {
 
            //invoiceService.WriteToFile();
