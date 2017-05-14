@@ -65,4 +65,10 @@ namespace eInvoicePdf
 
     }
 
+    public class CpvViewModel
+    {
+        public string Code { get; set; }
+        public string Desc { get; set; }
+    }
+
 }
