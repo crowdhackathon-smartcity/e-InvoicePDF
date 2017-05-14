@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.26430.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{4104FDB1-C2E2-4AF7-AEED-2B8904EC007F}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\Users\SPACE14\Desktop\e-InvoicePDF.pdf = ..\..\..\Users\SPACE14\Desktop\e-InvoicePDF.pdf
+		..\..\..\Users\SPACE14\Desktop\e-InvoicePDF.pptx = ..\..\..\Users\SPACE14\Desktop\e-InvoicePDF.pptx
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "e-InvoicePdf.Core", "e-InvoicePdf\e-InvoicePdf.Core\e-InvoicePdf.Core.csproj", "{74043E51-EF7B-4CE1-AF3F-7612ED1D05B6}"
 EndProject
