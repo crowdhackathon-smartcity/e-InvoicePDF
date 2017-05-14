@@ -134,6 +134,9 @@ namespace eInvoicePdf
             dest.Supplier.BuildingNumber = src.AccountingSupplierParty.Party.PostalAddress.BuildingNumber.Value;
             dest.Supplier.CityName = src.AccountingSupplierParty.Party.PostalAddress.CityName.Value;
             dest.Supplier.PostalZone = src.AccountingSupplierParty.Party.PostalAddress.PostalZone.Value;
+            if (src.AccountingSupplierParty.Party.PartyTaxScheme[0].TaxLevelCode != null)
+                dest.Supplier.TaxationAuthority = src.AccountingSupplierParty.Party.PartyTaxScheme[0].TaxLevelCode.Value;
+
             if (src.AccountingSupplierParty.Party.IndustryClassificationCode != null)
             {
                 dest.Supplier.IndustryClassificationCode = src.AccountingSupplierParty.Party.IndustryClassificationCode.Value;
@@ -157,6 +160,7 @@ namespace eInvoicePdf
                 lineDto.InvoicedQuantity = item.InvoicedQuantity.Value;
                 lineDto.VatPercentage = item.TaxTotal[0].TaxSubtotal[0].TaxCategory.Percent.Value;
                 lineDto.TaxAmount = item.TaxTotal[0].TaxSubtotal[0].TaxAmount.Value;
+                lineDto.PriceAmount = item.Price.PriceAmount.Value;
                 lines.Add(lineDto);
             }
 
@@ -245,6 +249,10 @@ namespace eInvoicePdf
                 dest.AccountingSupplierParty.Party.IndustryClassificationCode = new IndustryClassificationCodeType { Value = src.Supplier.IndustryClassificationCode };
             }
 
+            if (!string.IsNullOrEmpty(src.Supplier.TaxationAuthority))
+                dest.AccountingSupplierParty.Party.PartyTaxScheme[0].TaxLevelCode = new TaxLevelCodeType { Value = src.Supplier.TaxationAuthority }; 
+            //dest.Supplier.TaxationAuthority = ;
+
             var lines = new List<InvoiceLineType>();
             foreach (var item in src.Lines)
             {
@@ -267,6 +275,7 @@ namespace eInvoicePdf
                                         }
                                       }
                 };
+                line.Price = new PriceType { PriceAmount = new PriceAmountType { Value = item.PriceAmount } };
                 lines.Add(line);
             }
             dest.InvoiceLine = lines.ToArray();
