@@ -16,49 +16,49 @@
             <form id="target">
                 <div style="background: @InvoiceService.Profile.Color;">
                     <div class="form-group col-md-4">
-                        <label for="exampleInputEmail1">Αριθμός Παραστατικού: </label>
+                        <label for="exampleInputEmail1" class="white">Αριθμός Παραστατικού: </label>
                         <input type="text" class="form-control" id="aa" placeholder="Α/Α">
                     </div>
                     <div class="form-group col-md-4 input-group-sm">
-                        <label for="exampleInputEmail1">Ημερομηνία έκδοσης:</label>
+                        <label for="exampleInputEmail1"class="white">Ημερομηνία έκδοσης:</label>
                         <input class="datepicker" data-date-format="dd/mm/yyyy">
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="exampleInputEmail1">Αιτιολογία: </label>
+                        <label for="exampleInputEmail1" class="white">Αιτιολογία: </label>
                         <input type="text" class="form-control" id="aitiologia" placeholder="">
                     </div>
                 </div>
                 <div style="background: @InvoiceService.Profile.Color;">
                     <div class="form-group col-md-4">
-                        <label for="exampleInputEmail1">Κωδικός: </label>
+                        <label for="exampleInputEmail1" class="white">Κωδικός: </label>
                         <input type="password" class="form-control" id="password" placeholder="">
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="exampleInputPassword1">Επωνυμία: </label>
+                        <label for="exampleInputPassword1" class="white">Επωνυμία: </label>
                         <input type="text" class="form-control" id="name" value="@InvoiceService.Profile.Name">
                     </div>
                 </div>
                 <div style="background: @InvoiceService.Profile.Color;">
                     <div class="form-group col-md-4">
-                        <label for="exampleInputEmail1">Α.Φ.Μ. :</label>
+                        <label for="exampleInputEmail1" class="white">Α.Φ.Μ. :</label>
                         <input type="number" class="form-control" id="afm" value="@InvoiceService.Profile.VAT">
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="exampleInputPassword1">Δ.Ο.Υ.: </label>
+                        <label for="exampleInputPassword1" class="white">Δ.Ο.Υ.: </label>
                         <input type="text" class="form-control" id="dou" value="@InvoiceService.Profile.TaxationAuthority">
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="exampleInputEmail1">Διεύθυνση: </label>
+                        <label for="exampleInputEmail1" class="white">Διεύθυνση: </label>
                         <input type="email" class="form-control" id="address" value="@InvoiceService.Profile.StreetName">
                     </div>
                 </div>
                 <div style="background: @InvoiceService.Profile.Color;">
                     <div class="form-group col-md-4">
-                        <label for="exampleInputPassword1">Πόλη: </label>
+                        <label for="exampleInputPassword1" class="white">Πόλη: </label>
                         <input type="text" class="form-control" id="city" value="@InvoiceService.Profile.CityName">
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="exampleInputEmail1">Είδος: </label>
+                        <label for="exampleInputEmail1" class="white">Είδος: </label>
                         <select id="kind" style="width: 236px;">
                             <option value=""></option>
                             <option value="01">ΤΙΜΟΛΟΓΙΟ</option>
@@ -68,31 +68,31 @@
                         </select>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="exampleInputEmail1">Τ.Κ.: </label>
+                        <label for="exampleInputEmail1" class="white">Τ.Κ.: </label>
                         <input type="number" class="form-control" id="tk" value="@InvoiceService.Profile.PostalZone">
                     </div>
                 </div>
                 <div style="background: @InvoiceService.Profile.Color;">
                     <div class="form-group col-md-4">
-                        <label for="exampleInputPassword1">Επάγγελμα: </label>
+                        <label for="exampleInputPassword1" class="white">Επάγγελμα: </label>
                         <input type="text" class="form-control" id="job" placeholder="">
                     </div>
                 </div>
                 <div style="background: @InvoiceService.Profile.Color;">
                     <button class="addItem btn btn-info" style="margin-left: 15px;margin-bottom: 10px;">+</button>
-                    <label for="exampleInputEmail1">Λίστα με είδη: </label>
+                    <label for="exampleInputEmail1" class="white">Λίστα με είδη: </label>
                 </div>
                 <div style="background: @InvoiceService.Profile.Color;">
                     <table id="itemsTable" class="col-md-4" style="background: @InvoiceService.Profile.Color;">
                         <thead>
-                            <th>CPV</th>
-                            <th>Περιγραφή</th>
-                            <th>ΜΜ</th>
-                            <th>Αξία</th>
-                            <th>Ποσότητα</th>
-                            <th>Έκπτωση</th>
-                            <th>ΦΠΑ</th>
-                            <th>Συνολική Αξία</th>
+                            <th class="white">CPV</th>
+                            <th class="white">Περιγραφή</th>
+                            <th class="white">ΜΜ</th>
+                            <th class="white">Αξία</th>
+                            <th class="white">Ποσότητα</th>
+                            <th class="white">Έκπτωση</th>
+                            <th class="white">ΦΠΑ</th>
+                            <th class="white">Συνολική Αξία</th>
                         </thead>
                         <tbody>
                             <tr>
