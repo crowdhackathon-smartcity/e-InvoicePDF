@@ -1,5 +1,10 @@
 ﻿@using e_Invoice.Mvc.Models;
+@using eInvoicePdf;
 @model IEnumerable<InvoiceViewModel>
+@System.Configuration.ConfigurationManager.AppSettings["PartyName"];
+@System.Configuration.ConfigurationManager.AppSettings["VAT"];
+@System.Configuration.ConfigurationManager.AppSettings["Color"];
+@System.Configuration.ConfigurationManager.AppSettings["FolderDirectory"];
 
 <div class="modal-body">
 
@@ -10,7 +15,7 @@
                 <h2 style="">Δημιουργία Παραστατικού</h2>
             </div>
             <form id="target">
-                <div class="row blue">
+                <div style="background: @System.Configuration.ConfigurationManager.AppSettings["Color"];">
                     <div class="form-group col-md-4">
                         <label for="exampleInputEmail1">Αριθμός Παραστατικού: </label>
                         <input type="text" class="form-control" id="aa" placeholder="Α/Α">
@@ -24,20 +29,20 @@
                         <input type="text" class="form-control" id="aitiologia" placeholder="">
                     </div>
                 </div>
-                <div class="row blue">
+                <div style="background: @System.Configuration.ConfigurationManager.AppSettings["Color"];">
                     <div class="form-group col-md-4">
                         <label for="exampleInputEmail1">Κωδικός: </label>
                         <input type="password" class="form-control" id="password" placeholder="">
                     </div>
                     <div class="form-group col-md-4">
                         <label for="exampleInputPassword1">Επωνυμία: </label>
-                        <input type="text" class="form-control" id="name" placeholder="">
+                        <input type="text" class="form-control" id="name" value="@System.Configuration.ConfigurationManager.AppSettings["PartyName"]">
                     </div>
                 </div>
-                <div class="row blue">
+                <div style="background: @System.Configuration.ConfigurationManager.AppSettings["Color"];">
                     <div class="form-group col-md-4">
                         <label for="exampleInputEmail1">Α.Φ.Μ. :</label>
-                        <input type="number" class="form-control" id="afm" placeholder="">
+                        <input type="number" class="form-control" id="afm" value="@System.Configuration.ConfigurationManager.AppSettings["VAT"]">
                     </div>
                     <div class="form-group col-md-4">
                         <label for="exampleInputPassword1">Δ.Ο.Υ.: </label>
@@ -48,7 +53,7 @@
                         <input type="email" class="form-control" id="address" placeholder="">
                     </div>
                 </div>
-                <div class="row blue">
+                <div style="background: @System.Configuration.ConfigurationManager.AppSettings["Color"];">
                     <div class="form-group col-md-4">
                         <label for="exampleInputPassword1">Πόλη: </label>
                         <input type="password" class="form-control" id="city" placeholder="">
@@ -68,18 +73,18 @@
                         <input type="number" class="form-control" id="tk" placeholder="">
                     </div>
                 </div>
-                <div class="row blue">
+                <div style="background: @System.Configuration.ConfigurationManager.AppSettings["Color"];">
                     <div class="form-group col-md-4">
                         <label for="exampleInputPassword1">Επάγγελμα: </label>
                         <input type="text" class="form-control" id="job" placeholder="">
                     </div>
                 </div>
-                <div class="row blue">
+                <div style="background: @System.Configuration.ConfigurationManager.AppSettings["Color"];">
                     <button class="addItem btn btn-info" style="margin-left: 15px;margin-bottom: 10px;">+</button>
                     <label for="exampleInputEmail1">Λίστα με είδη: </label>
                 </div>
-                <div class="row blue">
-                    <table id="itemsTable" class="col-md-4">
+                <div style="background: @System.Configuration.ConfigurationManager.AppSettings["Color"];">
+                    <table id="itemsTable" class="col-md-4" style="background: @System.Configuration.ConfigurationManager.AppSettings["Color"];">
                         <thead>
                             <th>CPV</th>
                             <th>Περιγραφή</th>
